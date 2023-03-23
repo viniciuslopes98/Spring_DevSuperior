@@ -3,6 +3,7 @@ package app;
 import java.util.Scanner;
 
 import entities.Employee;
+import services.BrazilTaxService;
 import services.PensionService;
 import services.SalaryService;
 import services.TaxService;
@@ -19,7 +20,7 @@ public class Program {
 		System.out.print("Salario bruto: ");
 		double grossSalary = sc.nextDouble();
 		
-		TaxService taxService = new TaxService();
+		TaxService taxService = new BrazilTaxService();
 		PensionService pensionService = new PensionService();
 		
 		Employee employee = new Employee(name, grossSalary);
