@@ -13,6 +13,7 @@ import com.devsuperior.dscommerce.dto.ProductDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
 import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
+import com.devsuperior.dscommerce.services.exceptions.MethodArgumentNotValidException;
 import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -38,10 +39,15 @@ public class ProductService {
 	
 	@Transactional()
 	public ProductDTO insert(ProductDTO dto) {
-		Product entity = new Product();
-		copyDtoToEntity(dto, entity);
-		entity = repository.save(entity);
-		return new ProductDTO(entity);
+		try {
+			Product entity = new Product();
+			copyDtoToEntity(dto, entity);
+			entity = repository.save(entity);
+			return new ProductDTO(entity);
+		}
+		catch(MethodArgumentNotValidException e) {
+			throw new MethodArgumentNotValidException("Digite os valores corretamente!");
+		}
 	}
 	
 	@Transactional()
@@ -70,6 +76,7 @@ public class ProductService {
 		catch(DataIntegrityViolationException e) {
 			throw new DatabaseException("Falha de integridade referencial");
 		}
+		
 	}
 	
 	private void copyDtoToEntity(ProductDTO dto, Product entity) {
